@@ -2,6 +2,10 @@
 
 This script is a web crawler that retrieves the title, description, and keywords of a given website and stores them in a dictionary. It also follows links on the page and adds them to a queue to be crawled. The data is then written to a JSON file, which can be used to simulate what the Google search results for the website would look like after the Google bot has indexed it.
 
+## Screenshot
+
+![Google results on the test node server](results.png "Google results screenshot")
+
 ## Description of what the code does
 
 The web crawler performs the following actions:
