@@ -6,99 +6,149 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <style>
+  .result {
+    margin: 16px 0 32px;
+    max-width: 600px;
+  }
+.result-info p{
+    align-items: center;
+    display: contents;
+    margin-bottom: 8px;
+  }
+  .result-title {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #1a0dab;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+
+  .result-count {
+    margin-left: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #545454;
+  }
+
+  .result-title a {
+    text-decoration: none;
+    color: #1a0dab;
+  }
+
+  .result-title a:hover,
+  .result-title a:focus {
+    text-decoration: underline;
+  }
+
+  .result-description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #545454;
+  }
+
+  .result-url {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #006621;
+    font-style: normal;
+  }
+
+  .result-time {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #545454;
+  }
+    </style>
+    <script>
+      // Fetch the data from the JSON file
+      let count = 0;
+const startTime = Date.now();
+
+fetch('/data.json')
+  .then(response => response.json())
+  .then(data => {
+    // Get the results container
+    const resultsContainer = document.getElementById('results');
+
+    // Iterate over the data
+    for (const url in data) {
+      count++;
+    }
+
+    // Calculate the elapsed time
+    const elapsedTime = Date.now() - startTime;
+
+    // Format the count and elapsed time
+    const formattedCount = count.toLocaleString();
+    const formattedTime = elapsedTime / 1000;
+
+    // Add the count and elapsed time to the HTML
+    resultsContainer.innerHTML = `
+      <div class="result-info">
+        <p>About ${formattedCount} results</p>
+        <p>(${formattedTime} seconds)</p>
+      </div>
+    `;
+
+    // Iterate over the data again
+    for (const url in data) {
+      // Get the current item
+      const item = data[url];
+
+      const domain = url.split('/');
+
+      const paths = new URL(url).pathname;
+
+      // Split the URL into its component parts
+      const urlParts = paths.split('/');
+
+      // Add the URL to the result HTML
+      let resultHtml = `<div class="result"><p class="result-url"><a href="${url}">${domain[0]}//${domain[2]}`;
+
+      // Add the path elements to the result HTML if they exist
+      if (urlParts[1]) {
+        resultHtml['a'] += `
+          <span>&#62;</span>
+          <span>${urlParts[1]}</span>
+        `;
+      }
+      if (urlParts[2]) {
+        resultHtml += `
+          <span>&#62;</span>
+          <span>${urlParts[2]}</span>
+        `;
+      }
+
+      resultHtml += `</a></p>`;
+
+      // Create the HTML for the result
+      resultHtml += `
+          <h2 class="result-title">
+            <a href="${url}">${item.title}</a>
+          </h2>
+          <p class="result-description">${item.description}</p></div>
+      `;
+
+
+
+      // Add the result HTML to the results container
+      resultsContainer.innerHTML += resultHtml;
+    }
+  });
+</script>
+
+
+
+</script>
+
   </head>
   <body class="bg-gray-200">
     <div class="container mx-auto px-6 py-12">
       <h1 class="text-3xl font-bold text-gray-700 mb-6">Search Results</h1>
-      <ul class="list-reset">
-        <!-- Iterate through each URL and display the metadata -->
-        <li class="mb-8">
-          <a
-            href="https://kynetik.a2hosted.com"
-            class="text-blue-500 hover:text-blue-800"
-          >
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">
-              Kynetik Digital Agency - Web Design and Development for
-              Professional Websites
-            </h2>
-            <p class="text-gray-700 mb-4">
-              Transform your website into a professional, high-performing asset
-              with our web design and development services. Contact us for a
-              free consultation.
-            </p>
-          </a>
-        </li>
-        <li class="mb-8">
-          <a
-            href="https://kynetik.a2hosted.com/"
-            class="text-blue-500 hover:text-blue-800"
-          >
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">
-              Kynetik Digital Agency - Web Design and Development for
-              Professional Websites
-            </h2>
-            <p class="text-gray-700 mb-4">
-              Transform your website into a professional, high-performing asset
-              with our web design and development services. Contact us for a
-              free consultation.
-            </p>
-          </a>
-        </li>
-        <li class="mb-8">
-          <a
-            href="https://kynetik.a2hosted.com/posts/mastering-the-art-of-information-architecture-for-your-website-tips-for-talking-to-clients"
-            class="text-blue-500 hover:text-blue-800"
-          >
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">
-              Information Architecture for Websites: A Comprehensive Guide for
-              Clients
-            </h2>
-            <p class="text-gray-700 mb-4">
-              Want to create a website that's user-friendly and easy to
-              navigate? Learn how to effectively communicate the importance of
-              information architecture with your clients and create a website
-              that meets their needs
-            </p>
-          </a>
-        </li>
-        <li class="mb-8">
-          <a
-            href="https://kynetik.a2hosted.com/posts/mastering-unit-testing-for-front-end-frameworks-tips-tricks-and-in-depth-examples"
-            class="text-blue-500 hover:text-blue-800"
-          >
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">
-              Unit Testing Front-End Frameworks: In-Depth Examples and Best
-              Practices
-            </h2>
-            <p class="text-gray-700 mb-4">
-              Learn how to effectively unit test your front-end frameworks with
-              real-world examples and best practices. This comprehensive guide
-              covers everything you need to know to ensure the quality and
-              reliability of your web applications.
-            </p>
-          </a>
-        </li>
-        <li class="mb-8">
-          <a
-            href="https://kynetik.a2hosted.com/posts/understanding-behavior-driven-development-a-comprehensive-guide-with-examples"
-            class="text-blue-500 hover:text-blue-800"
-          >
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">
-              Unleashing the Power of Behavior-Driven Development: A
-              Comprehensive Guide to BDD in Software Development
-            </h2>
-            <p class="text-gray-700 mb-4">
-              Behavior-driven development (BDD) is a software development
-              process that helps ensure software meets the needs and
-              expectations of users. It improves communication between
-              developers, QA teams, and business stakeholders and helps to
-              reduce misunderstandings and miscommunications. Try BDD in your
-              workflow to improve the quality and effectiveness of your software
-              development process.
-            </p>
-          </a>
-        </li>
-      </ul>
+      <div class="" id="results"></div>
     </div>
   </body>
 </html>
