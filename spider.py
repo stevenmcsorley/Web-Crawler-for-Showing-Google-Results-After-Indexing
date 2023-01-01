@@ -1,3 +1,4 @@
+import sys
 import time
 import requests
 import re
@@ -34,7 +35,7 @@ def crawl(base_url, robots_url, data, url_queue, visited_urls, rp, url):
         # Stop the crawl if the request was rate limited
         if response.status_code == 429:
             print("429 - Too many requests, stopping crawl")
-            return data
+            sys.exit()  # Stop the script
 
         # Parse the HTML of the page
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -47,7 +48,7 @@ def crawl(base_url, robots_url, data, url_queue, visited_urls, rp, url):
             # Stop the crawl if the title is "Too many requests"
             if title == "Too many requests":
                 print("Too many requests, stopping crawl")
-                return data
+                sys.exit()  # Stop the script
         else:
             title = ''
 
@@ -95,7 +96,7 @@ def crawl(base_url, robots_url, data, url_queue, visited_urls, rp, url):
 
 def main():
     # Set the base url and the robots.txt url
-    base_url = 'https://kynetik.a2hosted.com'
+    base_url = 'https://stackoverflow.com'
     robots_url = base_url + '/robots.txt'
 
     # Initialize the robot parser
