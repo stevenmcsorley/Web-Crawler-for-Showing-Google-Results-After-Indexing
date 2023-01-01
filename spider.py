@@ -1,3 +1,4 @@
+import time
 import requests
 import re
 import json
@@ -11,19 +12,36 @@ def crawl(base_url, robots_url, data, url_queue, visited_urls, rp, url):
     rp.set_url(robots_url)
     rp.read()
 
+    # Check the value of the crawl-delay directive for your crawler
+    crawl_delay = rp.crawl_delay("my-crawler")
+
     try:
         # Check if the spider is allowed to crawl this url
         if not rp.can_fetch("my-spider", url):
             return data
 
+        
+        #set headers
+        headers = {'User-Agent': 'seo-test-bot'}
+
+        # Set a default crawl delay if it is not specified in the robots.txt file
+        if crawl_delay is None:
+            crawl_delay = 1
+
         # Send an HTTP GET request to the given url and return the response
-        response = requests.get(url)
+        response = requests.get(url, headers=headers)
 
         # Parse the HTML of the page
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # Extract the data you want to store
-        title = soup.title.string
+        # check for errors - 'NoneType' object has no attribute 'string'
+        title = soup.title
+        if title:
+            title = title.string
+        else:
+            title = ''
+
         description = soup.find('meta', attrs={'name': 'description'})
         if description:
             description = description['content']
