@@ -26,10 +26,15 @@ def crawl(base_url, robots_url, data, url_queue, visited_urls, rp, url):
 
         # Set a default crawl delay if it is not specified in the robots.txt file
         if crawl_delay is None:
-            crawl_delay = 1
+            crawl_delay = 5
 
         # Send an HTTP GET request to the given url and return the response
         response = requests.get(url, headers=headers)
+
+        # Stop the crawl if the request was rate limited
+        if response.status_code == 429:
+            print("429 - Too many requests, stopping crawl")
+            return data
 
         # Parse the HTML of the page
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -39,6 +44,10 @@ def crawl(base_url, robots_url, data, url_queue, visited_urls, rp, url):
         title = soup.title
         if title:
             title = title.string
+            # Stop the crawl if the title is "Too many requests"
+            if title == "Too many requests":
+                print("Too many requests, stopping crawl")
+                return data
         else:
             title = ''
 
