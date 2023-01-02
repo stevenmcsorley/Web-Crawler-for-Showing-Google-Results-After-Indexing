@@ -8,29 +8,35 @@ from urllib.robotparser import RobotFileParser
 from urllib.parse import urlparse
 from urllib.parse import urljoin
 
+
 def crawl(base_url, robots_url, data, url_queue, visited_urls, rp, url):
     # Initialize the robot parser
     rp.set_url(robots_url)
     rp.read()
 
     # Check the value of the crawl-delay directive for your crawler
-    crawl_delay = rp.crawl_delay("my-crawler")
+    crawl_delay = rp.crawl_delay("*")
+
+    # Set a default crawl delay if it is not a number
+    crawl_delay = crawl_delay if isinstance(crawl_delay, (int, float)) else 5
 
     try:
         # Check if the spider is allowed to crawl this url
-        if not rp.can_fetch("my-spider", url):
+        if not rp.can_fetch("*", url):
             return data
 
-        
-        #set headers
-        headers = {'User-Agent': 'seo-test-bot'}
-
-        # Set a default crawl delay if it is not specified in the robots.txt file
-        if crawl_delay is None:
-            crawl_delay = 5
+        # Set the user agent string
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
         # Send an HTTP GET request to the given url and return the response
         response = requests.get(url, headers=headers)
+
+        # Wait for the specified time before making the next request
+        time.sleep(crawl_delay)
+
+        # read the response
+        print(response.status_code)
 
         # Stop the crawl if the request was rate limited
         if response.status_code == 429:
@@ -96,7 +102,7 @@ def crawl(base_url, robots_url, data, url_queue, visited_urls, rp, url):
 
 def main():
     # Set the base url and the robots.txt url
-    base_url = 'https://stackoverflow.com'
+    base_url = 'https://kynetik.a2hosted.com'
     robots_url = base_url + '/robots.txt'
 
     # Initialize the robot parser
@@ -109,11 +115,13 @@ def main():
     while url_queue:
         url = url_queue.pop(0)
         visited_urls.add(url)
-        data = crawl(base_url, robots_url, data, url_queue, visited_urls, rp, url)
+        data = crawl(base_url, robots_url, data,
+                     url_queue, visited_urls, rp, url)
 
         # Write the dictionary to a JSON file
         with open('data.json', 'w') as f:
             json.dump(data, f)
+
 
 if __name__ == '__main__':
     main()

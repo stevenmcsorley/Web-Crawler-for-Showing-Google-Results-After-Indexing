@@ -109,8 +109,14 @@ fetch('/data.json')
       let resultHtml = `<div class="result"><p class="result-url"><a href="${url}">${domain[0]}//${domain[2]}`;
 
       // Add the path elements to the result HTML if they exist
-      if (urlParts[1]) {
+      if (urlParts[0]) {
         resultHtml['a'] += `
+          <span>&#62;</span>
+          <span>${urlParts[0]}</span>
+        `;
+      }
+      if (urlParts[1]) {
+        resultHtml += `
           <span>&#62;</span>
           <span>${urlParts[1]}</span>
         `;
@@ -121,6 +127,19 @@ fetch('/data.json')
           <span>${urlParts[2]}</span>
         `;
       }
+      if (urlParts[3]) {
+        resultHtml += `
+          <span>&#62;</span>
+          <span>${urlParts[3]}</span>
+        `;
+      }
+      if (urlParts[3]) {
+        resultHtml += `
+          <span>&#62;</span>
+          <span> ...</span>
+        `;
+      }
+
 
       resultHtml += `</a></p>`;
 
