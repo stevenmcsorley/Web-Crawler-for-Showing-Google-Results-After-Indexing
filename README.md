@@ -24,18 +24,21 @@ This allows the user to see what the Google search results for the website would
 ## Usage
 
 Install neccessary libraries for Python 3:
-   ` pip install requests`
-    `pip install beautifulsoup4`
-    `pip install robotparser`
+
+    pip install requests
+    pip install beautifulsoup4
+    pip install robotparser
 
 Add the url of the website you want to crawl to the `base_url` variable in `spider.py`.
  no trailing slash.
 
 Run the script:
-        `python spider.py`
+
+    python spider.py
 
 Start the node server:
-    `node server.js`
+
+    node server.js
 
 Navigate to `localhost:3000` in your browser.
 
