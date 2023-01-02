@@ -23,7 +23,25 @@ This allows the user to see what the Google search results for the website would
 
 ## Usage
 
-To use the crawler, run the `main()` function and specify the base URL of the website you want to crawl. The `data.json` file will be created with the crawled data.
+Install neccessary libraries for Python 3:
+   ` pip install requests`
+    `pip install beautifulsoup4`
+    `pip install robotparser`
+
+Add the url of the website you want to crawl to the `base_url` variable in `spider.py`.
+ no trailing slash.
+
+Run the script:
+        `python spider.py`
+
+Start the node server:
+    `node server.js`
+
+Navigate to `localhost:3000` in your browser.
+
+See the results from the `data.json` file on `http://localhost:3000`
+
+
 
 ## Requirements
 
